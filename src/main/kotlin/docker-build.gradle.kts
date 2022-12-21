@@ -11,10 +11,11 @@ tasks {
         val serviceName = project.findProperty("docker.serviceName") ?: throw GradleException("Property 'docker.serviceName' was not set")
         execScript(
             """
-                docker rmi -f $(docker images -q '$serviceName:*')
-                echo "$serviceName Images cleaned"
+                docker rmi -f $(docker images -q '$serviceName:*') 2>&1 >> /dev/null
+                exit 0
             """.trimIndent()
         )
+        logger.info("$serviceName images cleaned")
     }
     /**
      * Builds the Docker image. Manages the build version based on the semantic conventions
@@ -22,19 +23,19 @@ tasks {
      */
     create("buildImage") {
         doLast {
-            val bldDir = buildDir.path
             // copy the app and dependencies to the directory to be picked up by the Docker build
-            // TODO better location - should be passed as a "build-arg" to the build command?
+            // TODO should be passed as a "build-arg" to the build command?
+            val bldDir = "${buildDir.path}/docker/libs"
+
             copy {
-                into("$bldDir/tmp/libs")
-                from(configurations["runtimeClasspath"], "$bldDir/libs")
+                into(bldDir)
+                from(configurations["runtimeClasspath"], "${buildDir.path}/libs")
             }
 
             // set via `gradle.properties`
             val serviceName = project.findProperty("docker.serviceName") ?: throw GradleException("Property 'docker.serviceName' was not set")
-
             val imageName = "$serviceName:latest"
-            println(">>> Setting image version: $serviceName:$version")
+            logger.warn(">>> Setting image version: $serviceName:$version\n")
             execScript(
                 """
                     docker build -t $imageName .

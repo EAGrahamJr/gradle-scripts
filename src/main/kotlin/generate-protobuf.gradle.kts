@@ -1,5 +1,4 @@
-import com.google.protobuf.gradle.*
-import org.gradle.internal.impldep.junit.runner.Version.id
+import com.google.protobuf.gradle.id
 
 repositories {
     mavenLocal()
@@ -93,15 +92,26 @@ tasks.create("protoDistribution") {
             }
         }
         if (publishToRepo) {
-            val repoName = project.findProperty("protobuf.publish.repoName") ?: throw GradleException("Property 'protobuf.publish.repoName' was not set")
-            val repoUrl = project.findProperty("protobuf.publish.repoUrl") ?: throw GradleException("Property 'protobuf.publish.repoUrl' was not set")
+            val repoName = project.findProperty("protobuf.publish.repoName")?.toString() ?: throw GradleException("Property 'protobuf.publish.repoName' was not set")
+            val repoUrl = project.findProperty("protobuf.publish.repoUrl")?.toString() ?: throw GradleException("Property 'protobuf.publish.repoUrl' was not set")
+            val useMavenSettings: Boolean = project.findProperty("protobuf.publish.useM2")?.toString().toBoolean()
+
             repositories {
                 maven {
                     name = repoName
                     url = uri(repoUrl)
+                    if (!useMavenSettings) {
+                        credentials {
+                            username = System.getenv("MAVEN_ACTOR") ?: throw GradleException("Environment variable 'MAVEN_ACTOR' was not set")
+                            password = System.getenv("MAVEN_TOKEN") ?: throw GradleException("Environment variable 'MAVEN_TOKEN' was not set")
+                        }
+                    }
                 }
-                mavenSettings {
-                    userSettingsFileName = System.getenv("HOME") + "/.m2/settings.xml"
+                if (useMavenSettings) {
+                    mavenSettings {
+                        val DEFAULT = System.getenv("HOME") + "/.m2"
+                        userSettingsFileName = (System.getenv("H2_HOME") ?: DEFAULT) + "/settings.xml"
+                    }
                 }
             }
         }

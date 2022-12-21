@@ -2,7 +2,14 @@
 
 This project contains my "personal" Kotlin/Gradle build scripts, built as [re-usable plugins](https://docs.gradle.org/current/userguide/custom_plugins.html#sec:precompiled_plugins). Since it took me a bit of dorking to figure out how to _use_ them properly, keeping notes seems a good option.
 
-See the [list of plugins](Plugin List.md) currently available.
+:bangbang: There is **_ZERO_** guarantee on anything here
+
+- may not be suitable for your project(s)
+- haven't figured out testing yet, aside from _using_ them
+
+If there's a problem and you feel like contributing, please file an issue or fix it and submit a PR.
+
+sSee the [list of plugins](Plugin List.md) currently available.
 
 # Usage
 

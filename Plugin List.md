@@ -16,8 +16,9 @@ This plugin produces
     - service classes are compiled to both Java and Kotln client/server stubs
     - **stub** dependencies included transitively (_not_ the runtime-libraries)
 - publishes to a Maven repository when the _environment_ variable `PUBLISH_PROTO=true`
-  - uses the `net.linguica.maven-settings` plugin to pick up repository/security information via the typical `M2_HOME` environment setting
-  - TODO need to set up properties for remote Maven repo
+  - two options for Maven credentials (see [Maven Credentials](#maven-credentials))
+    1. use the `net.linguica.maven-settings` plugin to pick up repository/security information via the typical `M2_HOME` environment setting
+    2. use environment variables for the user/password
 
 ### Usage
 
@@ -30,7 +31,17 @@ This plugin produces
 - **Properties**
   - `protobuf.javaVersion` - the JVM version to target (default is _1.8_)
   - `protobuf.publish.repoName` - the name of the "publish" repository to target
-  - `protobuf.publish.repoUrl` = the URL of the "publish" repository
+  - `protobuf.publish.repoUrl` - the URL of the "publish" repository
+  - `protobuf.publish.useM2` - whether to use the `.m2` settings for publication or not
+
+#### Maven Credentials
+
+If the Gradle property `protobuf.publish.useM2` is "true", any Maven credentials will be loaded from the default `$M2_HOME` or `$HOME/.m2` directories.
+
+Otherwise, these **environment variables** are used for credentials:
+
+- `MAVEN_ACTOR` - username
+- `MAVEN_TOKEN` - the you-know-what
 
 ## docker-build
 
@@ -72,7 +83,5 @@ tasks {
 `gradle.properties`:
 
 ```properties
-docker.serviceName=myservice
-docker.mainClassName=path.to.AppKt
-
+docker.serviceName=group_path/my_service
 ```
