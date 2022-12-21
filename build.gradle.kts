@@ -39,9 +39,9 @@ tasks.create("pluginPublish") {
                     name = "some name"
                     url = uri("set publish URL")
                 }
-                mavenSettings {
-                    userSettingsFileName = System.getenv("HOME") + "/.m2/settings.xml"
-                }
+//                mavenSettings {
+//                    userSettingsFileName = System.getenv("HOME") + "/.m2/settings.xml"
+//                }
             }
         }
     }
