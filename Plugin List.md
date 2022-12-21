@@ -22,12 +22,12 @@ This plugin produces
 
 ### Usage
 
+- **Tasks**
+  - `protoDistribution` compiles, packages, and publishes the `protobuf`
+  - `buildProto` executes `clean`, then `protoDistribution`
 - **Requirements**
   - `protobuf` files are in `src/main/proto`
   - `group`, `module`, and `version` properties are properly set
-- **Targets**
-  - `protoDistribution` compiles, packages, and publishes the `protobuf`
-  - `buildProto` executes `clean`, then `protoDistribution`
 - **Properties**
   - `protobuf.javaVersion` - the JVM version to target (default is _1.8_)
   - `protobuf.publish.repoName` - the name of the "publish" repository to target
@@ -55,12 +55,12 @@ This plugin produces
 
 ### Usage
 
+- **Tasks**
+  - `cleanImage` - runs `docker rmi` to _attempt_ to remove app images (may not work on all systems)
+  - `buildImage` - runs `docker build` and `docker tag` to create the images
 - **Requirements**
   - project `version` set
   - the below properties are defined
-- **Targets**
-  - `cleanImage` - runs `docker rmi` to _attempt_ to remove app images (may not work on all systems)
-  - `buildImage` - runs `docker build` and `docker tag` to create the images
 - **Properties**
   - `docker.serviceName` - the name given to the image: the image will be tagged `serviceName:latest` and `serviceName:${project.version}`
 

@@ -2,14 +2,15 @@
 
 This project contains my "personal" Kotlin/Gradle build scripts, built as [re-usable plugins](https://docs.gradle.org/current/userguide/custom_plugins.html#sec:precompiled_plugins). Since it took me a bit of dorking to figure out how to _use_ them properly, keeping notes seems a good option.
 
-:bangbang: There is **_ZERO_** guarantee on anything here
-
-- may not be suitable for your project(s)
-- haven't figured out testing yet, aside from _using_ them
+:bangbang: There is **_ZERO_** guarantee on anything here! Caveat emptor.
 
 If there's a problem and you feel like contributing, please file an issue or fix it and submit a PR.
 
-sSee the [list of plugins](Plugin List.md) currently available.
+See the [list of plugins](Plugin List.md) currently available.
+
+**NOTE** Artifacts are currently _not_ published.
+
+![Just Build](https://github.com/EAGrahamJr/gradle-scripts/actions/workflows/build.yaml/badge.svg)
 
 # Usage
 
@@ -40,7 +41,7 @@ A "non-`buildSrc`" project will need to explicitly enable it in scripts:
 ```kotlin
 buildscript {
     dependencies {
-        classpath("my.gradle:my-gradle-plugins:1.0.0")
+        classpath("crackers.buildstuff:crackers-gradle-plugins:1.0.0")
     }
 }
 ```
