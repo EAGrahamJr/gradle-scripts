@@ -1,6 +1,6 @@
 plugins {
     `kotlin-dsl`
-    kotlin("jvm") version "1.7.20"
+    kotlin("jvm") version "1.7.21"
     `maven-publish`
 //    id("net.linguica.maven-settings") version "0.5"
     id("net.thauvin.erik.gradle.semver") version "1.0.4"
