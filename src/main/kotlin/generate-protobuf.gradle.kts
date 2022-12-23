@@ -110,7 +110,7 @@ tasks.create("protoDistribution") {
                 if (useMavenSettings) {
                     mavenSettings {
                         val DEFAULT = System.getenv("HOME") + "/.m2"
-                        userSettingsFileName = (System.getenv("H2_HOME") ?: DEFAULT) + "/settings.xml"
+                        userSettingsFileName = (System.getenv("M2_HOME") ?: DEFAULT) + "/settings.xml"
                     }
                 }
             }
