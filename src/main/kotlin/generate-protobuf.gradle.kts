@@ -2,13 +2,13 @@ import com.google.protobuf.gradle.id
 
 repositories {
     mavenLocal()
+    mavenCentral()
 }
 
 plugins {
     `java-library`
     `maven-publish`
     idea
-    id("net.linguica.maven-settings")
     id("com.google.protobuf")
 }
 
@@ -94,23 +94,14 @@ tasks.create("protoDistribution") {
         if (publishToRepo) {
             val repoName = project.findProperty("protobuf.publish.repoName")?.toString() ?: throw GradleException("Property 'protobuf.publish.repoName' was not set")
             val repoUrl = project.findProperty("protobuf.publish.repoUrl")?.toString() ?: throw GradleException("Property 'protobuf.publish.repoUrl' was not set")
-            val useMavenSettings: Boolean = project.findProperty("protobuf.publish.useM2")?.toString().toBoolean()
 
             repositories {
                 maven {
                     name = repoName
                     url = uri(repoUrl)
-                    if (!useMavenSettings) {
-                        credentials {
-                            username = System.getenv("MAVEN_ACTOR") ?: throw GradleException("Environment variable 'MAVEN_ACTOR' was not set")
-                            password = System.getenv("MAVEN_TOKEN") ?: throw GradleException("Environment variable 'MAVEN_TOKEN' was not set")
-                        }
-                    }
-                }
-                if (useMavenSettings) {
-                    mavenSettings {
-                        val DEFAULT = System.getenv("HOME") + "/.m2"
-                        userSettingsFileName = (System.getenv("M2_HOME") ?: DEFAULT) + "/settings.xml"
+                    credentials {
+                        username = System.getenv("MAVEN_ACTOR") ?: throw GradleException("Environment variable 'MAVEN_ACTOR' was not set")
+                        password = System.getenv("MAVEN_TOKEN") ?: throw GradleException("Environment variable 'MAVEN_TOKEN' was not set")
                     }
                 }
             }

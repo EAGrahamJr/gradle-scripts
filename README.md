@@ -45,3 +45,11 @@ buildscript {
     }
 }
 ```
+
+# Building
+
+Only requires a Java 8 JDK, since Gradle is "self-booting".
+
+# Local Artifactory
+
+Thanks to [JFrog](https://jfrog.com/community/open-source/), it's easy to setup a local repository (excluded from Git). The [`jfrog-test`](jfrog-test.sh) script will start (kind of setup) the _Docker_ image locally, with a lame attempt to properly configure the server for remote access.

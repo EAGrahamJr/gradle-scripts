@@ -2,7 +2,6 @@ plugins {
     `kotlin-dsl`
     kotlin("jvm") version "1.7.21"
     `maven-publish`
-//    id("net.linguica.maven-settings") version "0.5"
     id("net.thauvin.erik.gradle.semver") version "1.0.4"
 }
 
@@ -21,7 +20,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin")
     // this is so they work for downstream
     implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.1")
-    implementation("net.linguica.gradle:maven-settings-plugin:0.5")
 }
 
 group = "crackers.buildstuff"
@@ -30,7 +28,7 @@ group = "crackers.buildstuff"
  * Publish the plugin JAR (no sources).
  */
 tasks.create("pluginPublish") {
-    val isDefaultBranch = System.getenv("DEFAULT_BRANCH") == "true"
+    val isDefaultBranch = System.getenv("PUBLISH_LIB") == "true"
 
     publishing {
         if (isDefaultBranch) {
@@ -39,9 +37,6 @@ tasks.create("pluginPublish") {
                     name = "some name"
                     url = uri("set publish URL")
                 }
-//                mavenSettings {
-//                    userSettingsFileName = System.getenv("HOME") + "/.m2/settings.xml"
-//                }
             }
         }
     }

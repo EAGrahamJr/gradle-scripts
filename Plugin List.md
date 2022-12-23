@@ -1,5 +1,4 @@
 <!-- TOC -->
-
 * [Gradle Script Plugins](#gradle-script-plugins)
   * [About Maven Credentials](#about-maven-credentials)
 * [List of Plugins](#list-of-plugins)
@@ -11,7 +10,6 @@
     * [Usage](#usage)
     * [Example Build Script](#example-build-script)
     * [Example Docker File](#example-docker-file)
-
 <!-- TOC -->
 
 # Gradle Script Plugins
@@ -26,16 +24,12 @@ id("library-publish") version "1.0.0"
 
 ## About Maven Credentials
 
-Most "publish" task allow for two options to pick up Maven credentials. These are typically managed through a property setting named `xxxx.publish.useM2`. The _default_ is **false** (e.g. use environment variables).
+Most "publish" require two _environment_ variables to be set:
 
-- If the property is **true**, the plugins will use an included plugin<sup>**1**</sup> to pick up repository/security information
-  - the typical `M2_HOME` environment setting
-  - the _default_ location of `$HOME/.m2` _settings.xml_ file(s)
-- Otherwise, two _environment variables_ will be used:
   - `MAVEN_ACTOR` - username
   - `MAVEN_TOKEN` - the you-know-what
 
-<sup>**1**</sup> [net.linguica.maven-settings](https://github.com/mark-vieira/gradle-maven-settings-plugin)
+Also, sometimes an _insecure_ registry is involved. See [this link](https://docs.gradle.org/7.5.1/dsl/org.gradle.api.artifacts.repositories.UrlArtifactRepository.html#org.gradle.api.artifacts.repositories.UrlArtifactRepository:allowInsecureProtocol) to understand that particular setting.
 
 # List of Plugins
 
@@ -50,12 +44,12 @@ Publishes source and binary JAR files for "library" projects to a Maven reposito
     - if the **environment** variable `PUBLISH_LIBRARY` is _true_, the artifacts are pushed to the designated repository
     - otherwise they are published "locally"
 - **Requirements**
-  - Java or Kotlin source files
+  - Java and/or Kotlin source files
   - `group`, `module`, and `version` properties are properly set
 - **Properties**
   - `library.publish.repoName` - the name of the "publish" repository to target
   - `library.publish.repoUrl` - the URL of the "publish" repository
-  - `library.publish.useM2` - see [Maven Credentials](#about-maven-credentials)
+  - `library.publish.insecure` - if "true" (default **false**), allows for use of an _insecure_ registry (see [above](#about-maven-credentials))
 
 ## generate-protobuf
 
@@ -86,7 +80,7 @@ This plugin:
   - `protobuf.javaVersion` - the JVM version to target (default is _1.8_)
   - `protobuf.publish.repoName` - the name of the "publish" repository to target
   - `protobuf.publish.repoUrl` - the URL of the "publish" repository
-  - `protobuf.publish.useM2` - see [Maven Credentials](#about-maven-credentials)
+  - `protobuf.publish.insecure` - if "true" (default **false**), allows for use of an _insecure_ registry (see [above](#about-maven-credentials))
 
 ## docker-build
 
