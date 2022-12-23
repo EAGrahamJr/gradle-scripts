@@ -70,7 +70,9 @@ This plugin:
     - message classes are compiled to Java
     - service classes are compiled to both Java and Kotln client/server stubs
     - **stub** dependencies included transitively (_not_ the runtime-libraries)
-- publishes to a Maven repository
+- publishes all the artifacts to a Maven repository
+  - if the **environment** varible `PUBLISH_PROTO` is _true_, the artifacts are pushed to the designated repository
+    - otherwise they are published "locally"
 
 ### Usage
 
