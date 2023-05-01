@@ -41,7 +41,7 @@ A "non-`buildSrc`" project will need to explicitly enable it in scripts:
 ```kotlin
 buildscript {
     dependencies {
-        classpath("crackers.buildstuff:crackers-gradle-plugins:1.0.0")
+        classpath("crackers.buildstuff:crackers-gradle-plugins:1.0.1")
     }
 }
 ```

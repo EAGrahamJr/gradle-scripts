@@ -35,7 +35,8 @@ Also, sometimes an _insecure_ registry is involved. See [this link](https://docs
 
 ### library-publish
 
-Publishes source and binary JAR files for "library" projects to a Maven repository.
+Publishes source and binary JAR files for "library" projects to a Maven repository. See
+also [Kotlin Examples](Kotlin%20DSL%20Examples.md).
 
 #### Usage
 
@@ -43,6 +44,8 @@ Publishes source and binary JAR files for "library" projects to a Maven reposito
   * `libraryDistribution`creates and publishes the binary and source JARs
     * if the **environment** variable `PUBLISH_LIBRARY` is _true_, the artifacts are pushed to the designated repository
     * otherwise they are published "locally"
+    * the project's `-javadoc.jar` is automatically generated from artifacts labelled as "javadoc"
+      * if no Javadoc is generated, an "empty" JAR is produced
 * **Requirements**
   * Java and/or Kotlin source files
   * `group`, `module`, and `version` properties are properly set

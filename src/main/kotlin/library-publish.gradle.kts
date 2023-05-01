@@ -9,6 +9,7 @@ plugins {
 
 java {
     withSourcesJar()
+    withJavadocJar()
 }
 
 /**
