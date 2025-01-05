@@ -13,6 +13,7 @@ bin
 .gradle
 **/build/
 !src/**/build/
+.kotlin
 
 # Ignore Gradle GUI config
 gradle-app.setting

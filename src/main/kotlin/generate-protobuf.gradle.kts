@@ -1,4 +1,5 @@
 import com.google.protobuf.gradle.id
+import org.gradle.internal.impldep.junit.runner.Version.id
 
 repositories {
     mavenLocal()
@@ -12,9 +13,9 @@ plugins {
     id("com.google.protobuf")
 }
 
-// settable Java version
+// settable Java version - defaults to 17
 java {
-    JavaVersion.toVersion(project.findProperty("protobuf.javaVersion")?.toString() ?: "1.8").run {
+    JavaVersion.toVersion(project.findProperty("protobuf.javaVersion")?.toString() ?: "17").run {
         sourceCompatibility = this
         targetCompatibility = this
     }
@@ -31,7 +32,7 @@ dependencies {
 }
 
 val protoFiles = "$projectDir/src/main/proto"
-val outputDestination = "${project.buildDir}/protoDist"
+val outputDestination = "$projectDir/build/protoDist"
 
 /**
  * Make the generated classes "visible" to IDEA

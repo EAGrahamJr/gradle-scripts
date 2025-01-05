@@ -1,3 +1,3 @@
-val grpcVersion = "1.46.0"
-val protobufVersion = "3.21.1"
-val grpcKotlinVersion = "1.3.0"
+val grpcVersion = "1.69.0"
+val protobufVersion = "4.29.2"
+val grpcKotlinVersion = "1.4.1"

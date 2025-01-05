@@ -10,19 +10,33 @@ repositories {
     gradlePluginPortal()
 }
 
-// target Java 8 for maximum compatibility
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+kotlin {
+    jvmToolchain(17)
 }
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin")
     // this is so they work for downstream
-    implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.1")
+    implementation("com.google.protobuf:protobuf-gradle-plugin:0.9.4")
 }
 
 group = "crackers.buildstuff"
+
+gradlePlugin {
+    // Define the plugin
+    plugins {
+        create("libraryPublish") {
+            id = "crackers.buildstuff.crackers-gradle-plugins"
+            implementationClass = "LibraryPublishPlugin"
+            version = project.provider {
+                project.file("version.properties")
+                    .readLines()
+                    .findLast { it.startsWith("version.semver") }!!
+                    .split("=")[1]
+            }.get()
+        }
+    }
+}
 
 /**
  * Publish the plugin JAR (no sources).

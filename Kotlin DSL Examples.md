@@ -3,6 +3,9 @@
 ## Generating and Publishing KDoc
 
 ```kotlin
+plugins {
+    id("crackers.buildstuff.crackers-gradle-plugins") version "1.1.0"
+}
 
 tasks {
     /**
