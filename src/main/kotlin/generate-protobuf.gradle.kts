@@ -1,5 +1,4 @@
 import com.google.protobuf.gradle.id
-import org.gradle.internal.impldep.junit.runner.Version.id
 
 repositories {
     mavenLocal()
