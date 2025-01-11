@@ -1,15 +1,11 @@
 <!-- TOC -->
 * [Gradle Script Plugins](#gradle-script-plugins)
   * [About Maven Credentials](#about-maven-credentials)
-* [List of Plugins](#list-of-plugins)
-  * [library-publish](#library-publish)
-    * [Usage](#usage)
-  * [generate-protobuf](#generate-protobuf)
-    * [Usage](#usage)
-  * [docker-build](#docker-build)
-    * [Usage](#usage)
-    * [Example Build Script](#example-build-script)
-    * [Example Docker File](#example-docker-file)
+  * [List of Tasks](#list-of-tasks)
+    * [Publish Java Library](#publish-java-library)
+      * [Usage](#usage)
+    * [Generate Java and Kotlin `protobuf` implementations](#generate-java-and-kotlin-protobuf-implementations)
+      * [Usage](#usage-1)
 <!-- TOC -->
 
 # Gradle Script Plugins
@@ -33,6 +29,10 @@ Publishes source and binary JAR files for "library" projects to a Maven reposito
 
 #### Usage
 
+```kotlin
+id("crackers.buildstuff.library-publish")
+```
+
 * **Tasks**
   * `libraryDistribution`creates and publishes the binary and source JARs
     * if the **environment** variable `PUBLISH_LIBRARY` is _true_, the artifacts are pushed to the designated repository
@@ -49,31 +49,23 @@ Publishes source and binary JAR files for "library" projects to a Maven reposito
 
 ### Generate Java and Kotlin `protobuf` implementations
 
-Generates and publishes `protobuf` libraries. It is an extention of the above _ Publish Java Library_.
+Generates `protobuf` libraries.
 
 This plugin:
 
 * sets up IDEA "source directories" so generated source is available to projects
 * creates artifacts with the project version
-  * a ZIP file containting the `protobuf` definitions
-  * a Java JAR file, with the pre-compiled classes
-    * message classes are compiled to Java
-    * service classes are compiled to both Java and Kotln client/server stubs
-    * **stub** dependencies included transitively (_not_ the runtime-libraries)
-* publishes all the artifacts to a Maven repository
-  * if the **environment** varible `PUBLISH_PROTO` is _true_, the artifacts are pushed to the designated repository
-    * otherwise they are published "locally"
+  * message classes are compiled to Java
+  * service classes are compiled to both Java and Kotln client/server stubs
+  * **stub** dependencies included transitively (_including_ the runtime-libraries)
 
 #### Usage
 
-* **Tasks**
-  * `protoDistribution` compiles, packages, and publishes the `protobuf`
-  * `buildProto` executes `clean`, then `protoDistribution`
-* **Requirements**
-  * `protobuf` files are in `src/main/proto`
-  * `group`, `module`, and `version` properties are properly set
+```kotlin
+id("crackers.buildstuff.generate-protobuf")
+```
+
+This is simply just the "typical" `protobuf` generate setup as [documented](https://github.com/google/protobuf-gradle-plugin), nothing "fancy" added: just the Java and Kotlin generation parts. This should be completely transparent when used and all other options available should be available.
+
 * **Properties**
-  * `protobuf.javaVersion` - the JVM version to target (default is _17_)
-  * `protobuf.publish.repoName` - the name of the "publish" repository to target
-  * `protobuf.publish.repoUrl` - the URL of the "publish" repository
-  * `protobuf.publish.insecure` - if "true" (default **false**), allows for use of an _insecure_ registry (see [above](#about-maven-credentials))
+  * `protobuf.javaVersion` - sets the version of Java to use; defaults to **17** 

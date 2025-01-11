@@ -7,7 +7,6 @@ repositories {
 
 plugins {
     `java-library`
-    `maven-publish`
     idea
     id("com.google.protobuf")
 }
@@ -29,9 +28,6 @@ dependencies {
     // just in case
     implementation("javax.annotation:javax.annotation-api:1.3.2")
 }
-
-val protoFiles = "$projectDir/src/main/proto"
-val outputDestination = "$projectDir/build/protoDist"
 
 /**
  * Make the generated classes "visible" to IDEA
@@ -67,53 +63,4 @@ protobuf {
             }
         }
     }
-}
-
-/**
- * Sets up a ZIP file containing only the protobuf file(s) for publishing.
- */
-tasks.register("packageDistributionZip", Zip::class.java) {
-    getDestinationDirectory().set(file(outputDestination))
-    from(protoFiles)
-}
-
-/**
- * Publish! Destination depends on the environment variable.
- */
-tasks.create("protoDistribution") {
-    val publishToRepo = System.getenv("PUBLISH_PROTO") == "true"
-
-    publishing {
-        publications {
-            create<MavenPublication>("library") {
-                from(components["java"])
-                artifact(tasks.findByName("packageDistributionZip"))
-                artifactId = project.name
-            }
-        }
-        if (publishToRepo) {
-            val repoName = project.findProperty("protobuf.publish.repoName")?.toString() ?: throw GradleException("Property 'protobuf.publish.repoName' was not set")
-            val repoUrl = project.findProperty("protobuf.publish.repoUrl")?.toString() ?: throw GradleException("Property 'protobuf.publish.repoUrl' was not set")
-
-            repositories {
-                maven {
-                    name = repoName
-                    url = uri(repoUrl)
-                    credentials {
-                        username = System.getenv("MAVEN_ACTOR") ?: throw GradleException("Environment variable 'MAVEN_ACTOR' was not set")
-                        password = System.getenv("MAVEN_TOKEN") ?: throw GradleException("Environment variable 'MAVEN_TOKEN' was not set")
-                    }
-                }
-            }
-        }
-    }
-    dependsOn("packageDistributionZip")
-    if (publishToRepo)
-        dependsOn("publish")
-    else
-        dependsOn("publishToMavenLocal")
-}
-
-task("buildProto") {
-    dependsOn("clean", "protoDistribution")
 }

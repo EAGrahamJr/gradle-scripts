@@ -1,6 +1,6 @@
 plugins {
     `kotlin-dsl`
-    kotlin("jvm") version "1.7.21"
+    kotlin("jvm") version "2.0.0"
     `maven-publish`
     id("net.thauvin.erik.gradle.semver") version "1.0.4"
 }
@@ -26,14 +26,32 @@ gradlePlugin {
     // Define the plugin
     plugins {
         create("libraryPublish") {
-            id = "crackers.buildstuff.crackers-gradle-plugins"
+            id = "crackers.buildstuff.library-publish"
             implementationClass = "LibraryPublishPlugin"
-            version = project.provider {
-                project.file("version.properties")
-                    .readLines()
-                    .findLast { it.startsWith("version.semver") }!!
-                    .split("=")[1]
-            }.get()
+            project.afterEvaluate {
+                version = project.version
+            }
+        }
+        create("protobufGen") {
+            id = "crackers.buildstuff.generate-protobuf"
+            implementationClass = "GenerateProtobufPlugin"
+            project.afterEvaluate {
+                version = project.version
+            }
+        }
+    }
+}
+
+fun isDefaultBranch() = System.getenv("PUBLISH_LIB") == "true"
+
+publishing {
+    repositories {
+        // "protected" by the environment variable
+        if (isDefaultBranch()) {
+            maven {
+                name = "some_name"
+                url = uri("http://localhost")
+            }
         }
     }
 }
@@ -42,19 +60,7 @@ gradlePlugin {
  * Publish the plugin JAR (no sources).
  */
 tasks.create("pluginPublish") {
-    val isDefaultBranch = System.getenv("PUBLISH_LIB") == "true"
-
-    publishing {
-        if (isDefaultBranch) {
-            repositories {
-                maven {
-                    name = "some name"
-                    url = uri("set publish URL")
-                }
-            }
-        }
-    }
-    if (isDefaultBranch)
+    if (isDefaultBranch())
         dependsOn("incrementPatch", "build", "publish")
     else
         dependsOn("build", "publishToMavenLocal")
