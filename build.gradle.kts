@@ -39,6 +39,13 @@ gradlePlugin {
                 version = project.version
             }
         }
+        create("semverCounter") {
+            id = "crackers.buildstuff.simple-semver"
+            implementationClass = "crackers.buildstuff.semver.SimpleSemverPlugin"
+            project.afterEvaluate {
+                version = project.version
+            }
+        }
     }
 }
 
@@ -66,4 +73,4 @@ tasks.create("pluginPublish") {
         dependsOn("build", "publishToMavenLocal")
 }
 
-defaultTasks("clean", "pluginPublish")
+defaultTasks("pluginPublish")

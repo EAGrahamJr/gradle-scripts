@@ -4,7 +4,7 @@
 
 ```kotlin
 plugins {
-    id("crackers.buildstuff.crackers-gradle-plugins") version "1.1.0"
+    id("crackers.buildstuff.library-publish") version "1.3.0"
 }
 
 tasks {
@@ -14,18 +14,21 @@ tasks {
     dokkaGfm {
         outputDirectory.set(file("$projectDir/docs"))
     }
-    /**
-     * Generates Javadoc style documentation via the dependent task and
-     * creates the appropriate JAR artifact
-     */
+    // thees pick up ALL java/kotlin docs and packages them as docs jars
+    dokkaJavadoc {
+        mustRunAfter("javadoc")
+        outputDirectory.set(file("$projectDir/build/docs"))
+    }
+    javadocJar {
+        mustRunAfter("dokkaJavadoc")
+        include("$projectDir/build/docs")
+    }
+    // jar docs
     register<Jar>("dokkaJavadocJar") {
         dependsOn(dokkaJavadoc)
         from(dokkaJavadoc.flatMap { it.outputDirectory })
         archiveClassifier.set("javadoc")
     }
-    /**
-     * Later versions of Gradle require some explicit task dependencies...
-     */
     generateMetadataFileForLibraryPublication {
         mustRunAfter("dokkaJavadocJar")
     }

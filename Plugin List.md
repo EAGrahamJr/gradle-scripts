@@ -69,3 +69,65 @@ This is simply just the "typical" `protobuf` generate setup as [documented](http
 
 * **Properties**
   * `protobuf.javaVersion` - sets the version of Java to use; defaults to **17** 
+
+### Simple Semantic Versions
+
+Really nothing more than a very simple "version counter" that keeps track of a semantic version (`Major.Minor.Patch`) in a project file.
+
+It does **NOT**:
+
+* alter any _project_ properties at run-time
+* interact with `.git` or any other tag/library system
+* modify any build scripts or properties
+
+It _does_:
+
+* provide a very simple way of incrementing a version-like object and keeping track of if
+
+#### Usage
+
+```kotlin
+id("crackers.buildstuff.simple-semver")
+```
+
+* **Properties**
+  * set the location/name of the file _relative to the root project_:
+    ```properties
+    simple.semver.file=path/to/shared/file
+    ``` 
+    If not set, the default is a file named `semver.version` in the project directory. **NOTE** This means that each subproject can have it's own version, so caveat emptor.
+* **Tasks**
+  * `incrementPatch` - incre ments the _patch_ version
+  * `incrementMinor` - increments the _minor_ version
+  * `incrementMajor` - increments the _major_ version
+  * `showVersion` - logs the version to INFO (not suitable for sripts)
+  * `printVersion` - outputs the version to STDOUT
+*
+
+Directly using `semver.get()` returns a `SimpleSemverVersion` object with `major`, `minor`, and `patch` fields. The `toString()` returns `major.minor.patch`.
+
+To set the _project version_ to the semantic version, you can use the following:
+
+```kotlin
+  import crackers.buildstuff.semver.SimpleSemverVersion
+
+val semver: Provider<SimpleSemverVersion> by project
+version = semver.get().toString()   
+```
+
+:bangbang: **NOTE!!!** This sets the version during the _configuration_ phase of the build lifecycle: it cannot be changed at "runtime".
+
+This does not work:
+
+```shell
+./gradlew incrementPatch doSomethingWithVersion
+```
+
+since `project.version` is set _before_ `incrementPatch` is executed.
+
+This will do the expected thing:
+
+```shell
+./gradlew incrementPatch
+./gradlew doSomethingWithVersion
+```
